@@ -2,3 +2,6 @@ node_modules
 .env
 .env.local
 desktop.ini
+.env.example
+.env.example
+*.example
