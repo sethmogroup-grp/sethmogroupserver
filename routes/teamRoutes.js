@@ -17,12 +17,15 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const team = await Team.getSingleton();
-    
+
+    if (req.body.sectionHeading !== undefined) team.sectionHeading = req.body.sectionHeading;
+    if (req.body.sectionDescription !== undefined) team.sectionDescription = req.body.sectionDescription;
+
     // Check if the body contains members directly or inside an object
     // This makes the route more robust
     if (req.body.members) {
         team.members = req.body.members;
-    } else {
+    } else if (Array.isArray(req.body)) {
         team.members = req.body;
     }
     

@@ -1,25 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const About = require('../models/About');
+const createSingletonRouter = require('./singletonRouter');
 
-router.get('/', async (req, res) => {
-  try {
-    const about = await About.getSingleton();
-    res.json(about);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// GET /api/about, POST /api/about, POST /api/about/upload
+module.exports = createSingletonRouter({
+  Model: require('../models/About'),
+  fields: ['hero', 'history', 'values', 'purpose'],
+  folder: 'about_page',
 });
-
-router.post('/', async (req, res) => {
-  try {
-    const about = await About.getSingleton();
-    Object.assign(about, req.body);
-    await about.save();
-    res.json(about);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-module.exports = router;

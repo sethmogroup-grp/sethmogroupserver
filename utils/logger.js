@@ -1,10 +1,11 @@
 const ActivityLog = require('../models/ActivityLog');
 
-const logActivity = async (action, source) => {
+// adminUser is optional so every existing logActivity(action, source) call keeps working.
+const logActivity = async (action, source, adminUser) => {
   try {
-    const newLog = new ActivityLog({ action, source });
+    const newLog = new ActivityLog({ action, source, ...(adminUser ? { adminUser } : {}) });
     await newLog.save();
-    
+
     // Auto-clean: Keep only the most recent 100 logs
     const count = await ActivityLog.countDocuments();
     if (count > 100) {
